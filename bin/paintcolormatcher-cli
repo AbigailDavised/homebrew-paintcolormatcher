@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+/**
+ * paintcolormatcher-cli v1.0.0
+ * CIEDE2000 Cross-Brand Architectural Paint Color & LRV Matcher CLI
+ * Official reference utility for https://paintcolormatcher.com
+ * License: MIT
+ */
+
+const ROUTES = [
+  {
+    "name": "PaintColorMatcher Home",
+    "url": "https://paintcolormatcher.com/"
+  },
+  {
+    "name": "Find Paint Color from Photo (Wall Color Identifier)",
+    "url": "https://paintcolormatcher.com/find-paint-color-from-photo"
+  },
+  {
+    "name": "HEX to Real Paint Brand Converter (CIEDE2000)",
+    "url": "https://paintcolormatcher.com/hex-to-paint-color"
+  },
+  {
+    "name": "Behr Paint Colors Catalog & Cross-Brand Equivalents",
+    "url": "https://paintcolormatcher.com/behr-paint-colors"
+  },
+  {
+    "name": "Sherwin-Williams Full Color Index & LRV Reference",
+    "url": "https://paintcolormatcher.com/sherwin-williams-paint-colors"
+  },
+  {
+    "name": "Benjamin Moore Paint Colors, Undertones & Matches",
+    "url": "https://paintcolormatcher.com/benjamin-moore-paint-colors"
+  }
+];
+
+const SPECS = [
+  {
+    "Metric / Band": "Delta E 2000 <= 1.0",
+    "Numerical Range": "0.00 - 1.00 dE00",
+    "Visual & Architectural Interpretation": "Imperceptible difference to the human eye under D65 daylight",
+    "Recommended Sheen Pairing": "Direct cross-brand substitute"
+  },
+  {
+    "Metric / Band": "Delta E 2000 1.0 - 2.0",
+    "Numerical Range": "1.01 - 2.00 dE00",
+    "Visual & Architectural Interpretation": "Close commercial match; subtle undertone shift only at seam edges",
+    "Recommended Sheen Pairing": "Adjacent room / trim match"
+  },
+  {
+    "Metric / Band": "Low LRV (Dark Accent)",
+    "Numerical Range": "LRV 3% - 25%",
+    "Visual & Architectural Interpretation": "Absorbs >= 75% of incident light; requires high-hide tinted primer",
+    "Recommended Sheen Pairing": "Matte / Eggshell"
+  },
+  {
+    "Metric / Band": "Mid LRV (Balanced Wall)",
+    "Numerical Range": "LRV 45% - 68%",
+    "Visual & Architectural Interpretation": "Stable chroma across North-facing cool and South-facing warm rooms",
+    "Recommended Sheen Pairing": "Eggshell / Satin"
+  },
+  {
+    "Metric / Band": "High LRV (Gallery White)",
+    "Numerical Range": "LRV 75% - 94%",
+    "Visual & Architectural Interpretation": "Reflects daylight deeply; check b* axis (> +2.5 warm cream vs < 0 crisp)",
+    "Recommended Sheen Pairing": "Flat Ceiling / Semi-Gloss Trim"
+  }
+];
+
+const args = process.argv.slice(2);
+
+if (args.includes('--version') || args.includes('-v')) {
+  console.log('paintcolormatcher-cli v1.0.0 (https://paintcolormatcher.com)');
+  process.exit(0);
+}
+
+if (args.includes('--routes')) {
+  console.log(JSON.stringify({ domain: 'paintcolormatcher.com', endpoints: ROUTES }, null, 2));
+  process.exit(0);
+}
+
+if (args.includes('--specs') || args.includes('--json')) {
+  console.log(JSON.stringify({ domain: 'paintcolormatcher.com', benchmark: "CIEDE2000 Perceptual Tolerance & Light Reflectance Value (LRV) Thresholds", rows: SPECS }, null, 2));
+  process.exit(0);
+}
+
+console.log([
+  'PaintColorMatcher CLI (paintcolormatcher-cli v1.0.0)',
+  'CIEDE2000 Cross-Brand Architectural Paint Color & LRV Matcher CLI',
+  'Homepage: https://paintcolormatcher.com',
+  '',
+  'Usage:',
+  '  paintcolormatcher-cli --help       Show command overview and verified endpoints',
+  '  paintcolormatcher-cli --version    Print CLI version',
+  '  paintcolormatcher-cli --specs      Output domain technical specification matrix as JSON',
+  '  paintcolormatcher-cli --routes     Output verified production URLs as JSON',
+  '',
+  'Verified Production Endpoints:',
+  ...ROUTES.map((r) => '  - ' + r.name + ': ' + r.url),
+].join('\n'));
